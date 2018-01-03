@@ -54,12 +54,12 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
             } else {
                 root = convertView;
             }
-            TextView nameTextView = (TextView) root.findViewById(R.id.profile_info);
-            ImageView imageView = (ImageView) root.findViewById(R.id.image);
+            TextView nameTextView = root.findViewById(R.id.profile_info);
+            ImageView imageView =  root.findViewById(R.id.image);
             nameTextView.setText(String.format(Locale.getDefault(), NAME_AND_AGE_STRING_FORMAT, profile.getName(),
                     profile.getAge()));
 
-            Glide.with(mContext).load(profile.getImageUrl()).centerCrop().crossFade().into(imageView);
+            Glide.with(mContext).load(profile.getImageUrl()).centerCrop().dontAnimate().into(imageView);
         }
         return root != null ? root : convertView;
     }
