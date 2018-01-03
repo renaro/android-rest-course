@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">RestfulAppSample</string>
+    <string name="format_name">%1$s - %2$s</string>
+    <string name="age_format">Age = %d</string>
+</resources>
