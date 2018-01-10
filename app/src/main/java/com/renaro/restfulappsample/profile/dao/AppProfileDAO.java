@@ -25,9 +25,9 @@ public class AppProfileDAO extends ProfileDAO {
         userProfiles.add(new UserProfile(1,"https://www.gravatar.com/wavatar/1?s=200", "Joana",23 ));
         userProfiles.add(new UserProfile(2,"https://www.gravatar.com/wavatar/2?s=200", "John",31 ));
         userProfiles.add(new UserProfile(3,"https://www.gravatar.com/wavatar/3?s=200", "Louise",32 ));
-        userProfiles.add(new UserProfile(4,"https://www.gravatar.com/wavatar/4?s=200", "Mark",28 ));
-        userProfiles.add(new UserProfile(4,"https://www.gravatar.com/wavatar/5?s=200", "Anna",28 ));
-        userProfiles.add(new UserProfile(4,"https://www.gravatar.com/wavatar/6?s=200", "Roger",28 ));
+        userProfiles.add(new UserProfile(4,"https://www.gravatar.com/wavatar/4?s=200", "Mark",33 ));
+        userProfiles.add(new UserProfile(5,"https://www.gravatar.com/wavatar/5?s=200", "Anna",39 ));
+        userProfiles.add(new UserProfile(6,"https://www.gravatar.com/wavatar/6?s=200", "Roger",26 ));
         return userProfiles;
     }
 
