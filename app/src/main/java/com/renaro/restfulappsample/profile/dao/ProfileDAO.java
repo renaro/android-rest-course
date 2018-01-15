@@ -1,7 +1,7 @@
 package com.renaro.restfulappsample.profile.dao;
 
 
-import com.renaro.restfulappsample.profile.UserProfile;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 
 import java.util.List;
 

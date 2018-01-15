@@ -1,7 +1,5 @@
-package com.renaro.restfulappsample.profile;
+package com.renaro.restfulappsample.profile.model;
 
-
-import com.renaro.restfulappsample.model.RemoteProfile;
 
 /**
  * Created by renarosantos on 05/02/17.

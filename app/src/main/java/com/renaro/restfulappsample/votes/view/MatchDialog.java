@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.renaro.restfulappsample.R;
-import com.renaro.restfulappsample.profile.UserProfile;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 
 import java.util.Locale;
 

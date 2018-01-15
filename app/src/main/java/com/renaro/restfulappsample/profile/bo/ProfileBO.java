@@ -3,7 +3,7 @@ package com.renaro.restfulappsample.profile.bo;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
-import com.renaro.restfulappsample.profile.UserProfile;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.profile.dao.ProfileDAO;
 import com.renaro.restfulappsample.votes.model.VoteResponse;
 

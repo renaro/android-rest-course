@@ -9,7 +9,7 @@ import android.widget.Toast;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.renaro.restfulappsample.R;
 import com.renaro.restfulappsample.base.BaseActivity;
-import com.renaro.restfulappsample.profile.UserProfile;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.profile.bo.ProfileBO;
 import com.renaro.restfulappsample.profile.dao.AppProfileDAO;
 import com.renaro.restfulappsample.task.AppTaskExecutor;

@@ -1,4 +1,4 @@
-package com.renaro.restfulappsample.model;
+package com.renaro.restfulappsample.profile.model;
 
 /**
  * Created by renarosantos on 21/02/17.

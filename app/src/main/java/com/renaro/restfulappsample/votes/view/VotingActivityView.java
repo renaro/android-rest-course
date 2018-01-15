@@ -1,7 +1,7 @@
 package com.renaro.restfulappsample.votes.view;
 
 
-import com.renaro.restfulappsample.profile.UserProfile;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 
 import java.util.List;
 

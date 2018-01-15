@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.renaro.restfulappsample.base.BasePresenter;
-import com.renaro.restfulappsample.profile.UserProfile;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.profile.bo.ProfileBO;
 import com.renaro.restfulappsample.task.AppTask;
 import com.renaro.restfulappsample.task.TaskExecutor;
