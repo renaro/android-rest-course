@@ -4,6 +4,7 @@ import com.renaro.restfulappsample.profile.UserProfile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class AppProfileDAO extends ProfileDAO {
 
+    public static final int NUMBER_OF_USERS = 6;
     private static final int FAKE_MATCH_ID = 3;
 
     public AppProfileDAO() {
@@ -22,12 +24,11 @@ public class AppProfileDAO extends ProfileDAO {
     public List<UserProfile> fetchProfiles() {
 
         ArrayList<UserProfile> userProfiles = new ArrayList<>();
-        userProfiles.add(new UserProfile(1,"https://www.gravatar.com/wavatar/1?s=200", "Joana",23 ));
-        userProfiles.add(new UserProfile(2,"https://www.gravatar.com/wavatar/2?s=200", "John",31 ));
-        userProfiles.add(new UserProfile(3,"https://www.gravatar.com/wavatar/3?s=200", "Louise",32 ));
-        userProfiles.add(new UserProfile(4,"https://www.gravatar.com/wavatar/4?s=200", "Mark",33 ));
-        userProfiles.add(new UserProfile(5,"https://www.gravatar.com/wavatar/5?s=200", "Anna",39 ));
-        userProfiles.add(new UserProfile(6,"https://www.gravatar.com/wavatar/6?s=200", "Roger",26 ));
+        String imageUrl = "https://www.gravatar.com/wavatar/%d?s=200";
+        for (int i = 1; i <= NUMBER_OF_USERS; i++) {
+            userProfiles.add(new UserProfile(i, String.format(Locale.getDefault(), imageUrl, i), "Person " + i, 21 + i));
+        }
+
         return userProfiles;
     }
 
