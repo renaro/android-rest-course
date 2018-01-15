@@ -40,7 +40,7 @@ public class VotingActivity extends BaseActivity<VotingPresenter>
         final View brokenHeartIcon = findViewById(R.id.broken_hear_icon);
 
         loading = findViewById(R.id.loading);
-        mSwipeList = (SwipeFlingAdapterView) findViewById(R.id.swipe_list);
+        mSwipeList = findViewById(R.id.swipe_list);
         mSwipeList.setFlingListener(new SwipeListener());
         OnVoteButtonsClicked onVoteButtonsClicked = new OnVoteButtonsClicked();
         heartIcon.setOnClickListener(onVoteButtonsClicked);
