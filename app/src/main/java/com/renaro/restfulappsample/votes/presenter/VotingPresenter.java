@@ -23,9 +23,9 @@ public class VotingPresenter extends BasePresenter {
     private final TaskExecutor mTaskExecutor;
     private final ProfileBO mProfileBO;
     private UserProfile mLastSeenProfile;
-    private int mNumberOfUsers;
 
-    public VotingPresenter(@NonNull final VotingActivityView view, @NonNull final TaskExecutor taskExecutor,
+    public VotingPresenter(@NonNull final VotingActivityView view,
+                           @NonNull final TaskExecutor taskExecutor,
                            @NonNull final ProfileBO profileBO) {
         mTaskExecutor = taskExecutor;
         mView = view;
