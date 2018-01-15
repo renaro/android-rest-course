@@ -36,7 +36,6 @@ public class VotingPresenter extends BasePresenter {
     public void onResume() {
         super.onResume();
         fetchProfilesTask();
-        mNumberOfUsers = mProfileBO.getNumberOfUsers("token", 1000);
     }
 
     private void fetchProfilesTask() {
