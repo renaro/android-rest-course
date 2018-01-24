@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.renaro.restfulappsample.BuildConfig.SERVER_URL;
+import static com.renaro.restfulappsample.BuildConfig.SERVER_BASE_URL;
 
 
 /**
@@ -38,27 +38,30 @@ public class AppProfileDAO extends ProfileDAO {
     @Override
     public List<UserProfile> fetchProfiles() {
         ArrayList<UserProfile> result = new ArrayList<>();
-        HttpURLConnection urlConnection = null;
+        HttpURLConnection connection = null;
         try {
             /*defining the URL that we want to get our profiles and opening a connection.
               The default method of HttpURLConnection is GET, which is the one we want in this case.
               So no need to set up the method then.
+            SERVER_BASE_URL =https://demo1046700.mockable.io/tinderlikeapp/
+            The profiles resources are here:
+            https://demo1046700.mockable.io/tinderlikeapp/profiles/
              */
-            URL url = new URL(SERVER_URL.concat("profiles/"));
-            urlConnection = (HttpURLConnection) url.openConnection();
+            URL url = new URL(SERVER_BASE_URL.concat("profiles/"));
+            connection = (HttpURLConnection) url.openConnection();
             //getting the response of the request
-            if (urlConnection.getResponseCode() == STATUS_OK) {
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+            if (connection.getResponseCode() == STATUS_OK) {
+                InputStream in = new BufferedInputStream(connection.getInputStream());
                 result.addAll(readInput(in));
             } else {
-                Log.e("ERROR", "The response code is : " + urlConnection.getResponseCode());
+                Log.e("ERROR", "The response code is : " + connection.getResponseCode());
             }
         } catch (JSONException | IOException e) {
             Log.e("ERROR", "There was an error in the request");
             e.printStackTrace();
         } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
+            if (connection != null) {
+                connection.disconnect();
             }
         }
         return result;
