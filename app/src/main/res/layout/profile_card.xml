@@ -23,8 +23,7 @@
                 android:id="@+id/image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="#ffaa55"
-
+                tools:src="@tools:sample/avatars"
                 />
 
             <TextView
