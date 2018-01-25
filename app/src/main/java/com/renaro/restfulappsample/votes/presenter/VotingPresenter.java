@@ -111,7 +111,7 @@ public class VotingPresenter extends BasePresenter {
 
         @Override
         public void onPostExecute(@Nullable final VoteResponse result) {
-            if (result != null && result.isMatch()) {
+            if (result != null && result.isMatch() && mVote) {
                 mView.showMatch(mLastSeenProfile);
             } else if (result != null && result.isOutOfVotes()) {
                 mView.showOutOfVotes();

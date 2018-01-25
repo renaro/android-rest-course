@@ -154,6 +154,7 @@ public class AppProfileDAO extends ProfileDAO {
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
         connection.setDoOutput(true);
+
         DataOutputStream os = new DataOutputStream(connection.getOutputStream());
         os.writeBytes(URLEncoder.encode(postDataString,"UTF-8"));
         os.close();
