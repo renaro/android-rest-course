@@ -31,9 +31,7 @@ import static com.renaro.restfulappsample.BuildConfig.SERVER_BASE_URL;
 
 public class AppProfileDAO extends ProfileDAO {
 
-    public static final int NUMBER_OF_USERS = 6;
     public static final int STATUS_OK = 200;
-    private static final int FAKE_MATCH_ID = 3;
     private static final int USER_ID = 131;
 
     public AppProfileDAO() {
