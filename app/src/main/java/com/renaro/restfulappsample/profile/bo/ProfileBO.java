@@ -3,8 +3,8 @@ package com.renaro.restfulappsample.profile.bo;
 import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 
-import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.profile.dao.ProfileDAO;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.votes.model.VoteResponse;
 
 import java.util.List;
@@ -29,7 +29,7 @@ public class ProfileBO {
     public VoteResponse profileVoted(final UserProfile profile, final boolean vote) {
         final int remainingVotes = mDao.fetchRemainingVotes();
 
-        if (remainingVotes == 0){
+        if (remainingVotes == 0) {
             return new VoteResponse(false, true);
         } else {
             final boolean isAMatch = mDao.voteProfile(profile, vote);
@@ -37,7 +37,4 @@ public class ProfileBO {
         }
     }
 
-    public int getNumberOfUsers(final String token, final int limit) {
-        return 0;
-    }
 }
