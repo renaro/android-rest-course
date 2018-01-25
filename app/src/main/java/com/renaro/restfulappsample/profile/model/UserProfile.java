@@ -37,7 +37,6 @@ public class UserProfile {
     }
 
     public String getName() {
-        String teste = "teste";
         return name;
     }
 
