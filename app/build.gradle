@@ -36,4 +36,8 @@ dependencies {
 
     //SWIPING CARDS LIBRARY
     compile 'com.lorentzos.swipecards:library:1.0.9@aar'
+
+    //RETROFIT
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
 }

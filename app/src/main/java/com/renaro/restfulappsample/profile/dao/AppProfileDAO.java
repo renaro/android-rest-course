@@ -1,10 +1,21 @@
 package com.renaro.restfulappsample.profile.dao;
 
-import com.renaro.restfulappsample.profile.model.UserProfile;
+import android.util.Log;
 
+import com.renaro.restfulappsample.BuildConfig;
+import com.renaro.restfulappsample.profile.model.UserProfile;
+import com.renaro.restfulappsample.server.BackendServer;
+import com.renaro.restfulappsample.server.FetchProfileResponse;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
+import okhttp3.OkHttpClient;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -13,23 +24,32 @@ import java.util.Locale;
 
 public class AppProfileDAO extends ProfileDAO {
 
-    public static final int NUMBER_OF_USERS = 6;
+    public static final int TIMEOUT = 30;
     private static final int FAKE_MATCH_ID = 3;
+    private final BackendServer mService;
 
     public AppProfileDAO() {
+        OkHttpClient client = new OkHttpClient.Builder().readTimeout(TIMEOUT, TimeUnit.SECONDS).build();
+
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(BuildConfig.MOCK_URL)
+                .client(client)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        mService = retrofit.create(BackendServer.class);
 
     }
 
     @Override
     public List<UserProfile> fetchProfiles() {
-
-        ArrayList<UserProfile> userProfiles = new ArrayList<>();
-        String imageUrl = "https://www.gravatar.com/wavatar/%d?s=200";
-        for (int i = 1; i <= NUMBER_OF_USERS; i++) {
-            userProfiles.add(new UserProfile(i, String.format(Locale.getDefault(), imageUrl, i), "Person " + i, 21 + i));
+        try {
+            Response<FetchProfileResponse> response = mService.fetchProfiles().execute();
+            if (response.body() != null) {
+                return response.body().getProfiles();
+            }
+        } catch (IOException e) {
+            Log.e("ERROR", "Internet Connection", e);
         }
-
-        return userProfiles;
+        return new ArrayList<>();
     }
 
     @Override
