@@ -10,7 +10,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        def MOCK_URL = "\"https://demo9097994.mockable.io/tinderlikeapp/\""
+        def MOCK_URL = "\"https://demo1046700.mockable.io/tinderlikeapp/\""
         buildConfigField "String", "MOCK_URL", MOCK_URL
     }
     buildTypes {
