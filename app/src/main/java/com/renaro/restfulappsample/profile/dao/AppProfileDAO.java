@@ -15,7 +15,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -156,7 +155,7 @@ public class AppProfileDAO extends ProfileDAO {
         connection.setDoOutput(true);
 
         DataOutputStream os = new DataOutputStream(connection.getOutputStream());
-        os.writeBytes(URLEncoder.encode(postDataString,"UTF-8"));
+        os.writeBytes(URLEncoder.encode(postDataString, "UTF-8"));
         os.close();
         connection.connect();
         return connection;
