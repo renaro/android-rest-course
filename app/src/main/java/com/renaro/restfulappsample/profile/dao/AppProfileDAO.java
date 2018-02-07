@@ -6,6 +6,8 @@ import com.renaro.restfulappsample.BuildConfig;
 import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.server.BackendServer;
 import com.renaro.restfulappsample.server.FetchProfileResponse;
+import com.renaro.restfulappsample.server.VoteRequest;
+import com.renaro.restfulappsample.votes.model.VoteServerResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class AppProfileDAO extends ProfileDAO {
 
     public static final int TIMEOUT = 30;
     private static final int FAKE_MATCH_ID = 3;
+    private static final int USER_ID = 131;
     private final BackendServer mService;
 
     public AppProfileDAO() {
@@ -58,6 +61,16 @@ public class AppProfileDAO extends ProfileDAO {
 
     @Override
     public boolean voteProfile(final UserProfile profile, final boolean vote) {
-        return profile.getId() == FAKE_MATCH_ID && vote;
+        boolean isMatch = false;
+        try {
+            Response<VoteServerResponse> response = mService.voteProfile(new VoteRequest(USER_ID, profile.getId(), vote)).execute();
+            VoteServerResponse body = response.body();
+            if (body != null) {
+                isMatch = body.isMatch();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return isMatch;
     }
 }
