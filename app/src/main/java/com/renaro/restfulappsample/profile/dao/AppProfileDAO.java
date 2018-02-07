@@ -9,6 +9,10 @@ import com.renaro.restfulappsample.server.FetchProfileResponse;
 import com.renaro.restfulappsample.server.VoteRequest;
 import com.renaro.restfulappsample.votes.model.VoteServerResponse;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,58 @@ public class AppProfileDAO extends ProfileDAO {
                 .build();
         mService = retrofit.create(BackendServer.class);
 
+        String jsonString = createJsonString();
+        Log.d("JSON ", jsonString);
+        printJsonObject(jsonString);
+    }
+
+    private void printJsonObject(final String jsonString) {
+        try {
+            JSONObject root = new JSONObject(jsonString);
+            String name = root.getString("name");
+            int age = root.getInt("age");
+            JSONArray jsonArray = root.getJSONArray("favorite_movies");
+            String[] movies = new String[jsonArray.length()];
+            for (int i = 0; i < jsonArray.length(); i++) {
+                movies[i] = jsonArray.getString(i);
+            }
+            String streetName = root.getJSONObject("address").getString("street");
+            Log.d("JSON","Name =" + name+ ", age : " + age + ", Favorite movie =" + movies[0] + ", street name =" + streetName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+      {
+        "name": "John",
+        "age": 34,
+        "height": 5.7,
+        "single": true,
+        "favorite_movies": ["Star Wars", "Harry Potter"],
+        "address": {
+            "street": "Ocean Av, Miami",
+            "number": "55"
+            },
+        "car": null
+      }
+    */
+    private String createJsonString() {
+        JSONObject jsonRoot = new JSONObject();
+        try {
+            jsonRoot.put("name", "John");
+            jsonRoot.put("age", 34);
+            String[] movies = new String[]{"Star Wars", "Harry Potter"};
+            jsonRoot.put("favorite_movies", new JSONArray(movies));
+            JSONObject address = new JSONObject();
+            address.put("street", "Ocean Av, Miami");
+            address.put("number", "55");
+            jsonRoot.put("address", address);
+            jsonRoot.put("car", null);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonRoot.toString();
     }
 
     @Override
@@ -74,4 +130,5 @@ public class AppProfileDAO extends ProfileDAO {
         }
         return isMatch;
     }
+
 }
