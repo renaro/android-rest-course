@@ -49,53 +49,58 @@ public class AppProfileDAO extends ProfileDAO {
         printJsonObject(jsonString);
     }
 
+    /* {
+    "name": "John",
+    "age": 34,
+    "height": 5.7,
+    "single": true,
+    "favorite_movies": ["Star Wars", "Harry Potter"],
+    "address": {
+        "street": "Ocean Av, Miami",
+        "number": "55"
+        },
+    "car": null
+  }
+*/
+    private String createJsonString() {
+        JSONObject root = new JSONObject();
+        try {
+            root.put("name", "John");
+            root.put("age", 34);
+            root.put("height", 5.7);
+            root.put("single", true);
+            String[] movies = new String[]{"Star Wars", "Harry Potter"};
+            root.put("favorite_movies", new JSONArray(movies));
+            JSONObject address = new JSONObject();
+            address.put("street", "Ocean Av, Miami");
+            address.put("number", "55");
+            root.put("address", address);
+            root.put("car", null);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return root.toString();
+    }
+
     private void printJsonObject(final String jsonString) {
         try {
             JSONObject root = new JSONObject(jsonString);
             String name = root.getString("name");
             int age = root.getInt("age");
-            JSONArray jsonArray = root.getJSONArray("favorite_movies");
-            String[] movies = new String[jsonArray.length()];
-            for (int i = 0; i < jsonArray.length(); i++) {
-                movies[i] = jsonArray.getString(i);
+            double height = root.getDouble("height");
+            boolean single = root.getBoolean("single");
+            JSONArray moviesArrays = root.getJSONArray("favorite_movies");
+            String[] movies = new String[moviesArrays.length()];
+            for(int i = 0 ; i< moviesArrays.length() ; i++){
+                movies[i] = moviesArrays.getString(i);
             }
-            String streetName = root.getJSONObject("address").getString("street");
-            Log.d("JSON","Name =" + name+ ", age : " + age + ", Favorite movie =" + movies[0] + ", street name =" + streetName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
+            JSONObject addressObject = root.getJSONObject("address");
+            Log.d("json", "Name ="+name+" age ="+age+" favorite movie="+movies[0]+" address = "+addressObject.getString("street"));
 
-    /*
-      {
-        "name": "John",
-        "age": 34,
-        "height": 5.7,
-        "single": true,
-        "favorite_movies": ["Star Wars", "Harry Potter"],
-        "address": {
-            "street": "Ocean Av, Miami",
-            "number": "55"
-            },
-        "car": null
-      }
-    */
-    private String createJsonString() {
-        JSONObject jsonRoot = new JSONObject();
-        try {
-            jsonRoot.put("name", "John");
-            jsonRoot.put("age", 34);
-            String[] movies = new String[]{"Star Wars", "Harry Potter"};
-            jsonRoot.put("favorite_movies", new JSONArray(movies));
-            JSONObject address = new JSONObject();
-            address.put("street", "Ocean Av, Miami");
-            address.put("number", "55");
-            jsonRoot.put("address", address);
-            jsonRoot.put("car", null);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return jsonRoot.toString();
+
     }
 
     @Override
