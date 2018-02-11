@@ -2,16 +2,13 @@ package com.renaro.restfulappsample.profile.dao;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.renaro.restfulappsample.BuildConfig;
 import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.server.BackendServer;
 import com.renaro.restfulappsample.server.FetchProfileResponse;
 import com.renaro.restfulappsample.server.VoteRequest;
 import com.renaro.restfulappsample.votes.model.VoteServerResponse;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,62 +42,23 @@ public class AppProfileDAO extends ProfileDAO {
         mService = retrofit.create(BackendServer.class);
 
         String jsonString = createJsonString();
-        Log.d("JSON ", jsonString);
+        Log.d("JSON", jsonString);
         printJsonObject(jsonString);
     }
 
-    /* {
-    "name": "John",
-    "age": 34,
-    "height": 5.7,
-    "single": true,
-    "favorite_movies": ["Star Wars", "Harry Potter"],
-    "address": {
-        "street": "Ocean Av, Miami",
-        "number": "55"
-        },
-    "car": null
-  }
-*/
-    private String createJsonString() {
-        JSONObject root = new JSONObject();
-        try {
-            root.put("name", "John");
-            root.put("age", 34);
-            root.put("height", 5.7);
-            root.put("single", true);
-            String[] movies = new String[]{"Star Wars", "Harry Potter"};
-            root.put("favorite_movies", new JSONArray(movies));
-            JSONObject address = new JSONObject();
-            address.put("street", "Ocean Av, Miami");
-            address.put("number", "55");
-            root.put("address", address);
-            root.put("car", null);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return root.toString();
+    private void printJsonObject(final String jsonString) {
+        Gson gson = new Gson();
+        Person person = gson.fromJson(jsonString, Person.class);
+        Log.d("json", "Name : "+person.address.street);
+
+
     }
 
-    private void printJsonObject(final String jsonString) {
-        try {
-            JSONObject root = new JSONObject(jsonString);
-            String name = root.getString("name");
-            int age = root.getInt("age");
-            double height = root.getDouble("height");
-            boolean single = root.getBoolean("single");
-            JSONArray moviesArrays = root.getJSONArray("favorite_movies");
-            String[] movies = new String[moviesArrays.length()];
-            for(int i = 0 ; i< moviesArrays.length() ; i++){
-                movies[i] = moviesArrays.getString(i);
-            }
-            JSONObject addressObject = root.getJSONObject("address");
-            Log.d("json", "Name ="+name+" age ="+age+" favorite movie="+movies[0]+" address = "+addressObject.getString("street"));
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    private String createJsonString() {
+        Gson converter = new Gson();
+        Person person = new Person("John", 34, 5.7, true, new String[]{"Harry Potter", "Star Wars"},
+                "Ocean Av, Miami", "55b");
+        return converter.toJson(person);
     }
 
     @Override
@@ -135,5 +93,52 @@ public class AppProfileDAO extends ProfileDAO {
         }
         return isMatch;
     }
+
+     /* Sample data we are going to use
+    * {
+        "name": "John",
+        "age": 34,
+        "height": 5.7,
+        "single": true,
+        "favorite_movies": ["Star Wars", "Harry Potter"],
+        "address": {
+            "street": "Ocean Av, Miami",
+            "number": "55"
+            },
+        "car": null
+      }
+    * */
+
+    public class Person {
+        private String name;
+        private int age;
+        private double height;
+        private boolean single;
+        private String[] favoriteMovies;
+        private PersonAddress address;
+
+        public Person(final String name, final int age, final double height,
+                      final boolean single, final String[] favoriteMovies, String street, String number) {
+            this.name = name;
+            this.age = age;
+            this.height = height;
+            this.single = single;
+            this.favoriteMovies = favoriteMovies;
+            this.address = new PersonAddress(street, number);
+
+        }
+
+
+        public class PersonAddress {
+            private String street;
+            private String number;
+
+            public PersonAddress(final String street, final String number) {
+                this.street = street;
+                this.number = number;
+            }
+        }
+    }
+
 
 }
