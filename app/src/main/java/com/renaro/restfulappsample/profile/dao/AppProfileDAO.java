@@ -41,25 +41,8 @@ public class AppProfileDAO extends ProfileDAO {
                 .build();
         mService = retrofit.create(BackendServer.class);
 
-        String jsonString = createJsonString();
-        Log.d("JSON", jsonString);
-        printJsonObject(jsonString);
     }
 
-    private void printJsonObject(final String jsonString) {
-        Gson gson = new Gson();
-        Person person = gson.fromJson(jsonString, Person.class);
-        Log.d("json", "Name : "+person.address.street);
-
-
-    }
-
-    private String createJsonString() {
-        Gson converter = new Gson();
-        Person person = new Person("John", 34, 5.7, true, new String[]{"Harry Potter", "Star Wars"},
-                "Ocean Av, Miami", "55b");
-        return converter.toJson(person);
-    }
 
     @Override
     public List<UserProfile> fetchProfiles() {
@@ -93,52 +76,5 @@ public class AppProfileDAO extends ProfileDAO {
         }
         return isMatch;
     }
-
-     /* Sample data we are going to use
-    * {
-        "name": "John",
-        "age": 34,
-        "height": 5.7,
-        "single": true,
-        "favorite_movies": ["Star Wars", "Harry Potter"],
-        "address": {
-            "street": "Ocean Av, Miami",
-            "number": "55"
-            },
-        "car": null
-      }
-    * */
-
-    public class Person {
-        private String name;
-        private int age;
-        private double height;
-        private boolean single;
-        private String[] favoriteMovies;
-        private PersonAddress address;
-
-        public Person(final String name, final int age, final double height,
-                      final boolean single, final String[] favoriteMovies, String street, String number) {
-            this.name = name;
-            this.age = age;
-            this.height = height;
-            this.single = single;
-            this.favoriteMovies = favoriteMovies;
-            this.address = new PersonAddress(street, number);
-
-        }
-
-
-        public class PersonAddress {
-            private String street;
-            private String number;
-
-            public PersonAddress(final String street, final String number) {
-                this.street = street;
-                this.number = number;
-            }
-        }
-    }
-
 
 }
