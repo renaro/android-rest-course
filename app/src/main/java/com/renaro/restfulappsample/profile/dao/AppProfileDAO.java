@@ -28,7 +28,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AppProfileDAO extends ProfileDAO {
 
     public static final int TIMEOUT = 30;
-    private static final int FAKE_MATCH_ID = 3;
     private static final int USER_ID = 131;
     private final BackendServer mService;
 
