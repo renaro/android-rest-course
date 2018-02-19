@@ -2,7 +2,6 @@ package com.renaro.restfulappsample.profile.dao;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.renaro.restfulappsample.BuildConfig;
 import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.server.BackendServer;
@@ -27,18 +26,25 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AppProfileDAO extends ProfileDAO {
 
+    public static final int STATUS_OK = 200;
+    public static final int STATUS_SERVER_ERROR = 500;
     public static final int TIMEOUT = 15;
     private static final int USER_ID = 131;
     private final BackendServer mService;
+    private FetchProfilesError fetchProfilesError;
 
-    public AppProfileDAO() {
-        OkHttpClient client = new OkHttpClient.Builder().readTimeout(TIMEOUT, TimeUnit.SECONDS).build();
+    public AppProfileDAO(FetchProfilesError profilesError) {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(TIMEOUT, TimeUnit.SECONDS).build();
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(BuildConfig.SERVER_BASE_URL)
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.SERVER_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mService = retrofit.create(BackendServer.class);
+        fetchProfilesError = profilesError;
+
 
     }
 
@@ -47,11 +53,19 @@ public class AppProfileDAO extends ProfileDAO {
     public List<UserProfile> fetchProfiles() {
         try {
             Response<FetchProfileResponse> response = mService.fetchProfiles().execute();
-            if (response.body() != null) {
+            if (response.code() == STATUS_OK && response.body() != null) {
                 return response.body().getProfiles();
+            } else {
+                switch (response.code()){
+                    case STATUS_SERVER_ERROR :
+                        fetchProfilesError.onServerError();
+                       return null;
+                    default:
+                        return null;
+                }
             }
         } catch (IOException e) {
-            Log.e("ERROR", "Internet Connection", e);
+            fetchProfilesError.onInternetConnectionError();
         }
         return new ArrayList<>();
     }
@@ -74,6 +88,11 @@ public class AppProfileDAO extends ProfileDAO {
             e.printStackTrace();
         }
         return isMatch;
+    }
+
+    public interface FetchProfilesError {
+        void onServerError();
+        void onInternetConnectionError();
     }
 
 }

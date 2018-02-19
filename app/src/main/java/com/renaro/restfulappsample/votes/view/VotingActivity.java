@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.renaro.restfulappsample.R;
 import com.renaro.restfulappsample.base.BaseActivity;
+import com.renaro.restfulappsample.base.ErrorsHandler;
 import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.profile.bo.ProfileBO;
 import com.renaro.restfulappsample.profile.dao.AppProfileDAO;
@@ -29,7 +30,8 @@ public class VotingActivity extends BaseActivity<VotingPresenter>
     @NonNull
     @Override
     protected VotingPresenter createPresenter(@NonNull final Context context) {
-        return new VotingPresenter(this, new AppTaskExecutor(this), new ProfileBO(new AppProfileDAO()));
+        return new VotingPresenter(this, new AppTaskExecutor(this),
+                new ProfileBO(new AppProfileDAO(new ErrorsHandler(this))));
     }
 
     @Override
@@ -93,6 +95,16 @@ public class VotingActivity extends BaseActivity<VotingPresenter>
     @Override
     public void showOutOfVotes() {
         Toast.makeText(this, "Out of Votes! Wait", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showServerError(final String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showInternetConnectionError(final String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
