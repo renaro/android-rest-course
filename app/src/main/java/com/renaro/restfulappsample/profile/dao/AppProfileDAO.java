@@ -1,7 +1,5 @@
 package com.renaro.restfulappsample.profile.dao;
 
-import android.util.Log;
-
 import com.renaro.restfulappsample.BuildConfig;
 import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.server.BackendServer;
@@ -15,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -34,7 +33,11 @@ public class AppProfileDAO extends ProfileDAO {
     private FetchProfilesError fetchProfilesError;
 
     public AppProfileDAO(FetchProfilesError profilesError) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS).build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -49,6 +52,12 @@ public class AppProfileDAO extends ProfileDAO {
     }
 
 
+    /*
+    * DAO  notify the ErrorsHandler class if there was any error, and return null.
+    * If there was any error, my ErrorsHandler class will notify my VIEW
+    *
+    * DAO -> ErrorsHandler -> View
+    * */
     @Override
     public List<UserProfile> fetchProfiles() {
         try {
@@ -56,10 +65,10 @@ public class AppProfileDAO extends ProfileDAO {
             if (response.code() == STATUS_OK && response.body() != null) {
                 return response.body().getProfiles();
             } else {
-                switch (response.code()){
-                    case STATUS_SERVER_ERROR :
+                switch (response.code()) {
+                    case STATUS_SERVER_ERROR:
                         fetchProfilesError.onServerError();
-                       return null;
+                        return null;
                     default:
                         return null;
                 }
@@ -92,6 +101,7 @@ public class AppProfileDAO extends ProfileDAO {
 
     public interface FetchProfilesError {
         void onServerError();
+
         void onInternetConnectionError();
     }
 

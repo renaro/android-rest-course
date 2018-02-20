@@ -29,4 +29,5 @@ public interface VotingActivityView {
     void showServerError(String message);
 
     void showInternetConnectionError(String message);
+
 }
