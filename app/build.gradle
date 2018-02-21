@@ -11,7 +11,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         def SERVER_BASE_URL = "\"https://demo1046700.mockable.io/tinderlikeapp/\""
+        def API_KEY_SAMPLE = "\"8du8a9DdjoasHDJKsahd9ad98asdu\""
         buildConfigField "String", "SERVER_BASE_URL", SERVER_BASE_URL
+        buildConfigField "String", "API_KEY_SAMPLE", API_KEY_SAMPLE
     }
     buildTypes {
         release {
