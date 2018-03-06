@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -40,8 +39,8 @@ public class AppProfileDAO extends ProfileDAO {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(interceptor)
                 .addInterceptor(new CustomInterceptor())
+                .addInterceptor(interceptor)
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS).build();
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -115,13 +114,14 @@ public class AppProfileDAO extends ProfileDAO {
 
         @Override
         public okhttp3.Response intercept(final Chain chain) throws IOException {
-            Request original = chain.request();
-            if (POST.equals(original.method())) {
-                Request newRequest = original.newBuilder().addHeader(HeadersContract., BuildConfig.API_KEY_SAMPLE).build();
+            Request originalRequest = chain.request();
+            if (POST.equals(originalRequest.method())) {
+                Request newRequest = originalRequest.newBuilder()
+                        .addHeader("Authorization", BuildConfig.API_KEY_SAMPLE)
+                        .build();
                 return chain.proceed(newRequest);
-            } else {
-                return chain.proceed(original);
             }
+            return chain.proceed(originalRequest);
         }
     }
 }
