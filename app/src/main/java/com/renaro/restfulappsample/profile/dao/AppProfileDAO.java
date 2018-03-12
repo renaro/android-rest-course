@@ -48,7 +48,6 @@ public class AppProfileDAO extends ProfileDAO {
         mService = retrofit.create(BackendServer.class);
         fetchProfilesError = profilesError;
 
-
     }
 
 
