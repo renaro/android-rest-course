@@ -1,7 +1,5 @@
 package com.renaro.restfulappsample.profile.dao;
 
-import android.util.Log;
-
 import com.renaro.restfulappsample.BuildConfig;
 import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.server.BackendServer;
@@ -15,6 +13,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -25,31 +24,55 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AppProfileDAO extends ProfileDAO {
 
-    public static final int TIMEOUT = 30;
-    private static final int FAKE_MATCH_ID = 3;
+    public static final int STATUS_OK = 200;
+    public static final int STATUS_SERVER_ERROR = 500;
+    public static final int TIMEOUT = 15;
     private static final int USER_ID = 131;
     private final BackendServer mService;
+    private FetchProfilesError fetchProfilesError;
 
-    public AppProfileDAO() {
-        OkHttpClient client = new OkHttpClient.Builder().readTimeout(TIMEOUT, TimeUnit.SECONDS).build();
+    public AppProfileDAO(FetchProfilesError profilesError) {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        Retrofit retrofit = new Retrofit.Builder().baseUrl(BuildConfig.SERVER_BASE_URL)
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .readTimeout(TIMEOUT, TimeUnit.SECONDS).build();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.SERVER_BASE_URL)
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         mService = retrofit.create(BackendServer.class);
+        fetchProfilesError = profilesError;
 
     }
 
+
+    /*
+    * DAO  notify the ErrorsHandler class if there was any error, and return null.
+    * If there was any error, my ErrorsHandler class will notify my VIEW
+    *
+    * DAO -> ErrorsHandler -> View
+    * */
     @Override
     public List<UserProfile> fetchProfiles() {
         try {
             Response<FetchProfileResponse> response = mService.fetchProfiles().execute();
-            if (response.body() != null) {
+            if (response.code() == STATUS_OK && response.body() != null) {
                 return response.body().getProfiles();
+            } else {
+                switch (response.code()) {
+                    case STATUS_SERVER_ERROR:
+                        fetchProfilesError.onServerError();
+                        return null;
+                    default:
+                        return null;
+                }
             }
         } catch (IOException e) {
-            Log.e("ERROR", "Internet Connection", e);
+            fetchProfilesError.onInternetConnectionError();
         }
         return new ArrayList<>();
     }
@@ -73,4 +96,11 @@ public class AppProfileDAO extends ProfileDAO {
         }
         return isMatch;
     }
+
+    public interface FetchProfilesError {
+        void onServerError();
+
+        void onInternetConnectionError();
+    }
+
 }

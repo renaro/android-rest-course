@@ -37,7 +37,4 @@ public class ProfileBO {
         }
     }
 
-    public int getNumberOfUsers(final String token, final int limit) {
-        return 0;
-    }
 }

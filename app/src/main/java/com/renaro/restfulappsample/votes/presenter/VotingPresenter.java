@@ -4,8 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.renaro.restfulappsample.base.BasePresenter;
-import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.profile.bo.ProfileBO;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.task.AppTask;
 import com.renaro.restfulappsample.task.TaskExecutor;
 import com.renaro.restfulappsample.votes.model.VoteResponse;
@@ -82,6 +82,12 @@ public class VotingPresenter extends BasePresenter {
         //intentionally left blank
     }
 
+    private void showProfiles(final List<UserProfile> result) {
+        if (result != null && !result.isEmpty()) {
+            mView.showProfiles(result);
+        }
+    }
+
     private class FetchProfilesTask implements AppTask<List<UserProfile>> {
 
         @Override
@@ -92,7 +98,7 @@ public class VotingPresenter extends BasePresenter {
         @Override
         public void onPostExecute(@Nullable final List<UserProfile> result) {
             mView.hideLoading();
-            mView.showProfiles(result);
+            showProfiles(result);
         }
     }
 

@@ -25,4 +25,9 @@ public interface VotingActivityView {
     int cardsLeft();
 
     void showOutOfVotes();
+
+    void showServerError(String message);
+
+    void showInternetConnectionError(String message);
+
 }

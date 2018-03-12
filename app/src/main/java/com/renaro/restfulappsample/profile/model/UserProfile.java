@@ -12,7 +12,7 @@ public class UserProfile {
     private final String name;
     private final int age;
 
-    public UserProfile(final int id, final String imageUrl, final String name, final int age) {
+    private UserProfile(final int id, final String imageUrl, final String name, final int age) {
         this.id = id;
         this.imageUrl = imageUrl;
         this.name = name;
