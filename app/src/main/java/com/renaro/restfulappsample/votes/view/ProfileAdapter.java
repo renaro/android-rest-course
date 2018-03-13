@@ -25,7 +25,6 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
     public static final String NAME_AND_AGE_STRING_FORMAT = "%s, %d";
     private final Context mContext;
     private UserProfile[] mProfiles;
-    private ProfileListener mListener;
 
     public ProfileAdapter(final Context context, final int resource, final UserProfile[] objects) {
         super(context, resource, objects);
@@ -38,9 +37,6 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
         return mProfiles.length;
     }
 
-    public void setListener(final ProfileListener listener) {
-        mListener = listener;
-    }
 
     @NonNull
     @Override
@@ -55,7 +51,7 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
                 root = convertView;
             }
             TextView nameTextView = root.findViewById(R.id.profile_info);
-            ImageView imageView =  root.findViewById(R.id.image);
+            ImageView imageView = root.findViewById(R.id.image);
             nameTextView.setText(String.format(Locale.getDefault(), NAME_AND_AGE_STRING_FORMAT, profile.getName(),
                     profile.getAge()));
 
@@ -64,30 +60,8 @@ public class ProfileAdapter extends ArrayAdapter<UserProfile> {
         return root != null ? root : convertView;
     }
 
-    public void removeTop() {
-        if (mProfiles.length == 0) {
-            return;
-        }
-        UserProfile removedProfile = mProfiles[0];
-        if (mProfiles.length >= 1) {
-            mProfiles = Arrays.copyOfRange(mProfiles, 1, mProfiles.length);
-        } else {
-            mProfiles = new UserProfile[0];
-        }
-        if (mListener != null) {
-            if (removedProfile != null) {
-                mListener.onProfileRemoved(removedProfile);
-            } if(mProfiles.length == 0) {
-                mListener.onEmptyList();
-            }
-        }
+    public void profileRemoved() {
+        mProfiles = Arrays.copyOfRange(mProfiles, 1, mProfiles.length);
         notifyDataSetChanged();
-    }
-
-    public interface ProfileListener {
-
-        void onProfileRemoved(@NonNull final UserProfile profile);
-
-        void onEmptyList();
     }
 }

@@ -11,6 +11,7 @@ import com.renaro.restfulappsample.task.TaskExecutor;
 import com.renaro.restfulappsample.votes.model.VoteResponse;
 import com.renaro.restfulappsample.votes.view.VotingActivityView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,7 +23,8 @@ public class VotingPresenter extends BasePresenter {
     private final VotingActivityView mView;
     private final TaskExecutor mTaskExecutor;
     private final ProfileBO mProfileBO;
-    private UserProfile mLastSeenProfile;
+    private ArrayList<UserProfile> mProfiles;
+    private UserProfile mLastVotedProfile;
 
     public VotingPresenter(@NonNull final VotingActivityView view,
                            @NonNull final TaskExecutor taskExecutor,
@@ -30,6 +32,7 @@ public class VotingPresenter extends BasePresenter {
         mTaskExecutor = taskExecutor;
         mView = view;
         mProfileBO = profileBO;
+        mProfiles = new ArrayList<>();
     }
 
     @Override
@@ -51,10 +54,6 @@ public class VotingPresenter extends BasePresenter {
         mView.showPositiveVote();
     }
 
-    public void onProfileRemoved(final UserProfile profile) {
-        mLastSeenProfile = profile;
-    }
-
     public void onSlideProfileToLeft() {
         mTaskExecutor.async(new VoteTask(false));
     }
@@ -63,28 +62,20 @@ public class VotingPresenter extends BasePresenter {
         mTaskExecutor.async(new VoteTask(true));
     }
 
-    public void onEmptyList() {
-        fetchProfilesTask();
-    }
-
-    /*
-    * method to demonstrate how to get data from the view Interface
-    * */
-    private void checkCardsLeft() {
-        int amountLeft = mView.cardsLeft();
-        checkIfActionIsRerquired(amountLeft);
-    }
-
-    /*
-    * This method is intentionally left blank for demo purposes
-    * */
-    private void checkIfActionIsRerquired(int amountLeft) {
-        //intentionally left blank
-    }
-
     private void showProfiles(final List<UserProfile> result) {
         if (result != null && !result.isEmpty()) {
+            mProfiles = new ArrayList<>(result);
             mView.showProfiles(result);
+        } else {
+            mView.showEmptyList();
+        }
+    }
+
+    public void firstCardRemoved() {
+        mLastVotedProfile = mProfiles.remove(0);
+        mView.onProfileRemoved();
+        if (mProfiles.isEmpty()) {
+            fetchProfilesTask();
         }
     }
 
@@ -112,14 +103,15 @@ public class VotingPresenter extends BasePresenter {
 
         @Override
         public VoteResponse execute() {
-            return mProfileBO.profileVoted(mLastSeenProfile, mVote);
+            return mProfileBO.profileVoted(mLastVotedProfile, mVote);
         }
 
         @Override
         public void onPostExecute(@Nullable final VoteResponse result) {
-            if (result != null && result.isMatch() && mVote) {
-                mView.showMatch(mLastSeenProfile);
-            } else if (result != null && result.isOutOfVotes()) {
+            if (result == null) return;
+            if (result.isMatch()) {
+                mView.showMatch(mLastVotedProfile);
+            } else if (result.isOutOfVotes()) {
                 mView.showOutOfVotes();
             }
         }

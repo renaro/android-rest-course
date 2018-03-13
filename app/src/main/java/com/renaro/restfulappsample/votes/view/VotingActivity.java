@@ -10,9 +10,9 @@ import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 import com.renaro.restfulappsample.R;
 import com.renaro.restfulappsample.base.BaseActivity;
 import com.renaro.restfulappsample.base.ErrorsHandler;
-import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.profile.bo.ProfileBO;
 import com.renaro.restfulappsample.profile.dao.AppProfileDAO;
+import com.renaro.restfulappsample.profile.model.UserProfile;
 import com.renaro.restfulappsample.task.AppTaskExecutor;
 import com.renaro.restfulappsample.votes.presenter.VotingPresenter;
 
@@ -20,7 +20,7 @@ import java.util.List;
 
 
 public class VotingActivity extends BaseActivity<VotingPresenter>
-        implements VotingActivityView, ProfileAdapter.ProfileListener {
+        implements VotingActivityView {
 
     private View loading;
     private SwipeFlingAdapterView mSwipeList;
@@ -65,7 +65,6 @@ public class VotingActivity extends BaseActivity<VotingPresenter>
     public void showProfiles(final List<UserProfile> profiles) {
         UserProfile[] array = new UserProfile[profiles.size()];
         mAdapter = new ProfileAdapter(this, R.layout.profile_card, profiles.toArray(array));
-        mAdapter.setListener(this);
         mSwipeList.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
     }
@@ -88,13 +87,18 @@ public class VotingActivity extends BaseActivity<VotingPresenter>
     }
 
     @Override
-    public int cardsLeft() {
-        return mSwipeList.getChildCount();
+    public void showOutOfVotes() {
+        Toast.makeText(this, "Out of Votes! Wait", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void showOutOfVotes() {
-        Toast.makeText(this, "Out of Votes! Wait", Toast.LENGTH_SHORT).show();
+    public void showEmptyList() {
+
+    }
+
+    @Override
+    public void onProfileRemoved() {
+        mAdapter.profileRemoved();
     }
 
     @Override
@@ -108,16 +112,6 @@ public class VotingActivity extends BaseActivity<VotingPresenter>
     }
 
     @Override
-    public void onProfileRemoved(@NonNull final UserProfile profile) {
-        mPresenter.onProfileRemoved(profile);
-    }
-
-    @Override
-    public void onEmptyList() {
-        mPresenter.onEmptyList();
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         if (mMatchDialog != null) {
@@ -128,7 +122,7 @@ public class VotingActivity extends BaseActivity<VotingPresenter>
     private class SwipeListener implements SwipeFlingAdapterView.onFlingListener {
         @Override
         public void removeFirstObjectInAdapter() {
-            mAdapter.removeTop();
+            mPresenter.firstCardRemoved();
         }
 
         @Override

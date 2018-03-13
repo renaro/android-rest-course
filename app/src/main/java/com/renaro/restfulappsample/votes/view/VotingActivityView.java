@@ -1,6 +1,8 @@
 package com.renaro.restfulappsample.votes.view;
 
 
+import android.support.annotation.NonNull;
+
 import com.renaro.restfulappsample.profile.model.UserProfile;
 
 import java.util.List;
@@ -22,9 +24,11 @@ public interface VotingActivityView {
 
     void showMatch(UserProfile profile);
 
-    int cardsLeft();
-
     void showOutOfVotes();
+
+    void showEmptyList();
+
+    void onProfileRemoved();
 
     void showServerError(String message);
 

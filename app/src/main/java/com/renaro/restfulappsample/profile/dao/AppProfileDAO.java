@@ -90,7 +90,7 @@ public class AppProfileDAO extends ProfileDAO {
             Response<VoteServerResponse> response = mService.voteProfile(new VoteRequest(USER_ID, profile.getId(), vote)).execute();
             VoteServerResponse body = response.body();
             if (body != null) {
-                isMatch = body.isMatch();
+                isMatch = body.isMatch() && vote;
             }
         } catch (IOException e) {
             e.printStackTrace();
